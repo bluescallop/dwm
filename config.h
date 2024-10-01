@@ -5,8 +5,8 @@ static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "monospace:size=10" };
-static const char dmenufont[]       = "monospace:size=10";
+static const char *fonts[]          = { "Hack Nerd Font:size=10" };
+static const char dmenufont[]       = "Hack Nerd Font:size=10";
 static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
@@ -61,17 +61,28 @@ static const Layout layouts[] = {
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
+#define STATUSBAR "dwmblocks"
+
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", NULL };
 static const char *termcmd[]  = { "st", NULL };
 static const char *browser[]  = { "firefox", NULL };
+static const char *volume[5][4] = { { "wpctl", "set-volume", "@DEFAULT_SINK@", "1%-" }, { "wpctl", "set-volume", "@DEFAULT_SINK@", "1%+" }, { "wpctl", "set-mute", "@DEFAULT_SINK@", "toggle" }, { "wpctl", "set-mute", "@DEFAULT_SOURCE@", "toggle"}, {NULL} };
+//static const char *volumeup[] = { "wpctl", "set-volume", "@DEFAULT_SINK@", "1%-", NULL };
+//static const char *volumedown[] = { "wpctl", "set-volume", "@DEFAULT_SINK@", "1%+", NULL };
+//static const char *volumemute[] = { "wpctl", "set-mute", "@DEFAULT_SINK@", "toggle", NULL };
 
+#include <X11/XF86keysym.h>
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
+	{ 0,		XF86XK_AudioLowerVolume,   spawn,	   {.v = volume[0] } },
+	{ 0,		XF86XK_AudioRaiseVolume,   spawn,	   {.v = volume[1] } },
+	{ 0,		XF86XK_AudioMute,          spawn,	   {.v = volume[2] } },
+	{ 0,		XF86XK_AudioMicMute,       spawn,	   {.v = volume[3] } },
 	{ MODKEY,			XK_n,      spawn,          {.v = browser } },
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
-	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
+	{ 0,                       XF86XK_Launch1, spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
@@ -116,7 +127,9 @@ static const Button buttons[] = {
 	{ ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
 	{ ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },
 	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
-	{ ClkStatusText,        0,              Button2,        spawn,          {.v = termcmd } },
+	{ ClkStatusText,	0,		Button1,	sigstatusbar,   {.i = 1} },
+	{ ClkStatusText,        0,              Button2,        sigstatusbar,   {.i = 2} },
+        { ClkStatusText,        0,              Button3,        sigstatusbar,   {.i = 3} },
 	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
 	{ ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
 	{ ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
