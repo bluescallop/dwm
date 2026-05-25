@@ -19,7 +19,7 @@ static const char col_urgborder[]   = "#ff0000";
 //	[SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
 //	[SchemeUrg]  = { col_gray4, col_cyan,  col_urgborder  },
 //};
-#include "/home/scallop/dwm/colors-wal-dwm.h"
+#include "/home/scallop/.cache/wal/colors-wal-dwm.h"
 
 /* tagging */
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
